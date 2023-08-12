@@ -4,8 +4,9 @@ wire w,x,y,z;
 reg [3:0]inp;
 task1 U0(.a(inp[3]), .b(inp[2]), .c(inp[1]), .d(inp[0]), .w(w), .x(x), .y(y), .z(z));
 initial
-begin
     inp = 4'd0;
+always
+begin
     #10 inp = 4'd1;
     #10 inp = 4'd2;
     #10 inp = 4'd3;
@@ -16,6 +17,5 @@ begin
     #10 inp = 4'd8;
     #10 inp = 4'd9;
     #10 inp = 4'd0;
-    #10 $finish;
 end
 endmodule
