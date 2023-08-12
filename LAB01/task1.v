@@ -1,4 +1,4 @@
-`timescale 1ns / 1ps 
+`timescale 1ns / 1ps
 module task1(
     input a,
     input b,
@@ -9,8 +9,8 @@ module task1(
     output y,
     output z
     );
-    assign w = a;
-    assign x = a^b;
-    assign y = b^c;
-    assign z = c^d;
+    assign w = (a&~b&~c)|(~a&b&d)|(~a&b&c);
+    assign x = (~a&~b&c&d)|(~a&b&~c);
+    assign y = (~a&c)|(~a&b);
+    assign z = (a&~b&~c&~d)|(~a&~b&d)|(~a&~b&c)|(~a&c&d);
 endmodule
