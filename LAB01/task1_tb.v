@@ -15,12 +15,7 @@ begin
     #10 inp = 4'd7;
     #10 inp = 4'd8;
     #10 inp = 4'd9;
-    #10 inp = 4'd10;
-    #10 inp = 4'd11;
-    #10 inp = 4'd12;
-    #10 inp = 4'd13;
-    #10 inp = 4'd14;
-    #10 inp = 4'd15;
+    #10 inp = 4'd0;
     #10 $finish;
 end
 endmodule
