@@ -27,7 +27,7 @@ always @*
 	`BCD_BIT_WIDTH'd12: segs = `SSD_C;
 	`BCD_BIT_WIDTH'd13: segs = `SSD_D;
 	`BCD_BIT_WIDTH'd14: segs = `SSD_E;
-	`BCD_BIT_WIDTH'd15: segs = `SSD_F;
+	`BCD_BIT_WIDTH'd15: segs = 8'b11111111;
 	 default: segs = `SSD_DEF;
   endcase
   
