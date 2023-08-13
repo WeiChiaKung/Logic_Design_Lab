@@ -36,6 +36,7 @@ reg [1:0]next_state; // next state of FSM
 // ***************************
 // FSM state decision
 always @*
+begin
 if(set_mode)
 begin
   next_state = `STAT_INITIAL;
@@ -103,6 +104,7 @@ begin
         stop = `DISABLED;
       end
   endcase
+end
 end
 
 // FSM state transition
