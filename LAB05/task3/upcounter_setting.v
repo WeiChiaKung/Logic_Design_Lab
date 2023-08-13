@@ -8,21 +8,25 @@ module upcounter_setting(
   clk,  // global clock
   rst,  // high active reset
   en, // enable/disable for the stopwatch
-  en1
+  en1,
+  set_mode
 );
 output [`BCD_BIT_WIDTH-1:0] digit3; // 4nd digit of the up counter
 output [`BCD_BIT_WIDTH-1:0] digit2; // 3st digit of the up counter
 output [`BCD_BIT_WIDTH-1:0] digit1; // 2nd digit of the up counter
 output [`BCD_BIT_WIDTH-1:0] digit0; // 1st digit of the up counter
 
+
 input clk;  // global clock
 input rst;  // low active reset
 input en; // enable/disable for the stopwatch
 input en1;
+input set_mode;
 
 wire cr0,cr1,cr2,cr3; // borrow indicator 
-wire increase_enable;
-
+wire increase_enable_min,increase_enable_sec;
+assign increase_enable_min = en1 & set_mode;
+assign increase_enable_sec = en & set_mode;
   
 // 30 sec up counter
 upcounter Udc0(
@@ -30,7 +34,7 @@ upcounter Udc0(
   .carry(cr0),  // carry indicator for counter to next stage
   .clk(clk), // global clock signal
   .rst(rst),  // low active reset
-  .increase(en),  // increase input from previous stage of counter
+  .increase(increase_enable_sec),  // increase input from previous stage of counter
   .init_value(`BCD_ZERO),  // initial value for the counter
   .limit(`BCD_NINE)  // limit for the counter
 );
@@ -49,7 +53,7 @@ upcounter Udc2(
   .carry(cr2),  // carry indicator for counter to next stage
   .clk(clk), // global clock signal
   .rst(rst),  // low active reset
-  .increase(en1),  // increase input from previous stage of counter
+  .increase(increase_enable_min),  // increase input from previous stage of counter
   .init_value(`BCD_ZERO),  // initial value for the counter
   .limit(`BCD_NINE)  // limit for the counter
 );
