@@ -61,7 +61,8 @@ upcounter_setting U_up(
   .clk(clk_d),  // global clock
   .rst(rst),  // high active reset
   .en(in2), // enable/disable for the stopwatch
-  .en1(in3)
+  .en1(in3),
+  .set_mode(set_mode)
 );
 // stopwatch module
 downcounter_4d U_sw(
