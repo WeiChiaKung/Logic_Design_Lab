@@ -10,7 +10,7 @@ module task2(
     reg count,count_temp;
     up_counter U0(.CLK(CLK), .rst_n(rst_n), .count({CLK_temp,temp}));
     always@(*)
-        count_temp = count+1;
+        count_temp = ~count;
     always@(posedge CLK_temp or negedge rst_n)
     begin
         if(~rst_n)
