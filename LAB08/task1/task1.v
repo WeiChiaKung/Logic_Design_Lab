@@ -29,37 +29,39 @@ module task1(
         .rst(rst),
         .clk(clk)
     );
-    always@(*)
+    always@(posedge clk)
     begin
         case(last_change)
         8'h70:
-            number = `BCD_ZERO;
+            number <= `BCD_ZERO;
         8'h69:
-            number = `BCD_ONE;
+            number <= `BCD_ONE;
         8'h72:
-            number = `BCD_TWO;
+            number <= `BCD_TWO;
         8'h7A:
-            number = `BCD_THREE;
+            number <= `BCD_THREE;
         8'h6B:
-            number = `BCD_FOUR;
+            number <= `BCD_FOUR;
         8'h73:
-            number = `BCD_FIVE;
+            number <= `BCD_FIVE;
         8'h74:
-            number = `BCD_SIX;
+            number <= `BCD_SIX;
         8'h6C:
-            number = `BCD_SEVEN;
+            number <= `BCD_SEVEN;
         8'h75:
-            number = `BCD_EIGHT;
+            number <= `BCD_EIGHT;
         8'h7D:
-            number = `BCD_NINE;
+            number <= `BCD_NINE;
         8'h1C:
-            number = 4'd10;
+            number <= 4'd10;
         8'h1B:
-            number = 4'd11;
+            number <= 4'd11;
         8'h3A:
-            number = 4'd12;
+            number <= 4'd12;
+        8'h5A:
+            number <= 4'd15;
         default:
-            number = 0;
+            number <= number;
         endcase
     end
     scan_ctl U_SC(
@@ -76,4 +78,3 @@ module task1(
         .bin(ssd_in)  // BCD number input
       );   
 endmodule
-
