@@ -211,7 +211,7 @@ begin
       set_enable = switch;
       set_hour_min_sec = `SETMIN;
       if (short_press)
-        state_next = `ALM_SETSEC;
+        state_next = `ALM_SETHOUR;
       else if (long_press)
       begin
         state_next =  `ALM_DISP;
@@ -220,11 +220,11 @@ begin
       else
         state_next = `ALM_SETMIN;
     end
-  `ALM_SETSEC:
+  `ALM_SETHOUR:
     begin
-      state_led = `ALM_SETSEC;
+      state_led = `ALM_SETHOUR;
       set_enable = switch;
-      set_hour_min_sec = `SETSEC;
+      set_hour_min_sec = `SETHOUR;
       if (short_press)
         state_next = `ALM_SETMIN;
       else if (long_press)
@@ -233,14 +233,14 @@ begin
         data_load_enable = `ENABLED;
       end
       else
-        state_next = `ALM_SETSEC;
+        state_next = `ALM_SETHOUR;
     end
   `DATE_DISP:
       begin
         state_led = `DATE_DISP;
         if (long_press)
         begin
-          state_next = `DATE_SETDATE;
+          state_next = `DATE_SETMONTH;
           reg_load_enable = `ENABLED;
         end
         else if (short_press)
