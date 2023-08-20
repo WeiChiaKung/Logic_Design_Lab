@@ -18,7 +18,7 @@ reg [`BCD_BIT_WIDTH-1:0] sec0, sec1,min0, min1, hour0, hour1,date0, date1, month
 wire [`BCD_BIT_WIDTH-1:0] ssd_in;
 wire [`BCD_BIT_WIDTH-1:0] time_sec0, time_sec1,time_min0, time_min1, time_hour0, time_hour1, time_date0, time_date1,time_month0, time_month1, time_year0, time_year1; // Binary counter output
 wire [`BCD_BIT_WIDTH-1:0] stopwatch_sec0, stopwatch_sec1, stopwatch_min0, stopwatch_min1; // Binary counter output
-wire [`BCD_BIT_WIDTH-1:0] alarm_sec0, alarm_sec1,alarm_min0, alarm_min1; // Binary counter output
+wire [`BCD_BIT_WIDTH-1:0] alarm_min0, alarm_min1,alarm_hour0, alarm_hour1; // Binary counter output
 wire [`BCD_BIT_WIDTH-1:0] reg_q0, reg_q1, reg_q2, reg_q3, reg_q4, reg_q5; // Binary counter 
 wire [`BCD_BIT_WIDTH-1:0] reg_q0_date, reg_q1_date, reg_q2_date, reg_q3_date, reg_q4_date, reg_q5_date; // Binary counter 
 reg [`BCD_BIT_WIDTH-1:0] reg_load_q0, reg_load_q1, reg_load_q2, reg_load_q3, reg_load_q4, reg_load_q5; // Binary counter 
@@ -91,19 +91,19 @@ stopwatch Ustw(
 // Alarm
 alarm(
   .led(alarm_led),
-  .alarm_sec0(alarm_sec0),
-  .alarm_sec1(alarm_sec1),
   .alarm_min0(alarm_min0),
   .alarm_min1(alarm_min1),
-  .time_sec0(time_sec0),
-  .time_sec1(time_sec1),
+  .alarm_hour0(alarm_hour0),
+  .alarm_hour1(alarm_hour1),
   .time_min0(time_min0),
   .time_min1(time_min1),
+  .time_hour0(time_hour0),
+  .time_hour1(time_hour1),
   .load_value_enable(data_load_enable && (state[4:3] == `ALM)),
-  .load_value_sec0(reg_q0),
-  .load_value_sec1(reg_q1),
   .load_value_min0(reg_q2),
   .load_value_min1(reg_q3),
+  .load_value_hour0(reg_q4),
+  .load_value_hour1(reg_q5),
   .alarm_enable(alarm_enable),
   .clk(clk_1),
   .rst_n(rst_n)
@@ -140,12 +140,12 @@ always @*
     end
   `ALM:
     begin
-      reg_load_q0 = alarm_sec0;
-      reg_load_q1 = alarm_sec1;
+      reg_load_q0 = 4'd0;
+      reg_load_q1 = 4'd0;
       reg_load_q2 = alarm_min0;
       reg_load_q3 = alarm_min1;
-      reg_load_q4 = 4'd0;
-      reg_load_q5 = 4'd0;
+      reg_load_q4 = alarm_hour0;
+      reg_load_q5 = alarm_hour1;
     end
   `DATE:
     begin
@@ -258,10 +258,10 @@ always @*
     end
   `ALM_DISP:
     begin
-      sec0 = alarm_sec0;
-      sec1 = alarm_sec1;
-      min0 = alarm_min0;
-      min1 = alarm_min1;
+      sec0 = alarm_min0;
+      sec1 = alarm_min1;
+      min0 = alarm_hour0;
+      min1 = alarm_hour1;
     end
   `TIME_SETMIN:
     begin
@@ -307,17 +307,17 @@ always @*
     end
   `ALM_SETMIN:
     begin
-      sec0 = reg_q0;
-      sec1 = reg_q1;
-      min0 = reg_q2;
-      min1 = reg_q3;
+      sec0 = reg_q2;
+      sec1 = reg_q3;
+      min0 = reg_q4;
+      min1 = reg_q5;
     end
-  `ALM_SETSEC:
+  `ALM_SETHOUR:
     begin
-      sec0 = reg_q0;
-      sec1 = reg_q1;
-      min0 = reg_q2;
-      min1 = reg_q3;
+      sec0 = reg_q2;
+      sec1 = reg_q3;
+      min0 = reg_q4;
+      min1 = reg_q5;
     end
   default:
     begin
@@ -347,4 +347,3 @@ display U_display(
 );
 
 endmodule
-
