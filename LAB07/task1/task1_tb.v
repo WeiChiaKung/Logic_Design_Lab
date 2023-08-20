@@ -6,7 +6,7 @@ wire audio_mclk;
 wire audio_lrck;
 wire audio_sck;
 wire audio_sdin;
-speaker U0(
+task1 U0(
   .clk(clk), // clock from crystal
   .rst_n(rst_n), // active low reset
   .audio_mclk(audio_mclk), // master clock
