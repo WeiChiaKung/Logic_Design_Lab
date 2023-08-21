@@ -7,7 +7,8 @@ module stopwatch(
   input count_enable, // counting enabled control signal
   input lap,
   input clk, // clock
-  input rst_n // low active reset
+  input rst_n, // low active reset
+  input reset
 );
 wire [`BCD_BIT_WIDTH-1:0] dig0,dig1,dig2,dig3;
 reg [`BCD_BIT_WIDTH-1:0] lap0,lap1,lap2,lap3;
@@ -21,9 +22,8 @@ upcounter_4d U_sw(
   .digit1(dig1),  // 2nd digit of the down counter
   .digit0(dig0),  // 1st digit of the down counter
   .clk(clk),  // global clock
-  .rst_n(rst_n),  // low active reset
-  .stop_n(count_enable),
-  .en(1'b1) // enable/disable for the stopwatch
+  .rst_n(rst_n && ~reset),  // low active reset
+  .en(count_enable) // enable/disable for the stopwatch
 );
 always@(posedge lap)
 begin
