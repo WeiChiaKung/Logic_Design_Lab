@@ -29,120 +29,64 @@ reg count_enable;  // if counter is enabled
 reg show_time;
 reg [1:0]state; // state of FSM
 reg [1:0]next_state; // next state of FSM
-
 // ***************************
 // FSM
 // ***************************
 // FSM state decision
 always @*
   case (state)
+    `STAT_INITIAL:
+    begin
+      count_enable = `DISABLED;
+      show_time = `DISABLED;
+      if (in && ~in1)
+        next_state = `STAT_COUNT;
+      else 
+        next_state = `STAT_INITIAL;
+    end
     `STAT_STOP:
-      if (in && ~in1)
-      begin
-        next_state = `STAT_COUNT;
-        count_enable = `ENABLED;
-        show_time = `DISABLED;
-      end
-      else if (in && in1)
-      begin
-        next_state = `STAT_LAP_count;
-        count_enable = `ENABLED;
-        show_time = `ENABLED;
-      end
-      else if (~in && ~in1)
-      begin
-        next_state = `STAT_STOP;
-        count_enable = `DISABLED;
-        show_time = `DISABLED;
-      end
+    begin
+      count_enable = `DISABLED;
+      show_time = `ENABLED;
+      if (~in && in1)
+        next_state = `STAT_INITIAL;
       else
-      begin
-        next_state = `STAT_LAP_stop;
-        count_enable = `DISABLED;
-        show_time = `ENABLED;
-      end
+        next_state = `STAT_STOP;
+    end
     `STAT_COUNT:
+    begin
+      count_enable = `ENABLED;
+      show_time = `DISABLED;
       if (in && ~in1)
-      begin
         next_state = `STAT_STOP;
-        count_enable = `DISABLED;
-        show_time = `DISABLED;
-      end
-      else if (in && in1)
-      begin
-        next_state = `STAT_LAP_stop;
-        count_enable = `DISABLED;
-        show_time = `ENABLED;
-      end
       else if (~in && ~in1)
-      begin
         next_state = `STAT_COUNT;
-        count_enable = `ENABLED;
-        show_time = `DISABLED;
-      end
       else
-      begin
         next_state = `STAT_LAP_count;
-        count_enable = `ENABLED;
-        show_time = `ENABLED;
-      end
-    `STAT_LAP_stop:
-      if (in && ~in1)
-      begin
-        next_state = `STAT_LAP_count;
-        count_enable = `ENABLED;
-        show_time = `ENABLED;
-      end
-      else if (in && in1)
-      begin
-        next_state = `STAT_COUNT;
-        count_enable = `ENABLED;
-        show_time = `DISABLED;
-      end
-      else if (~in && ~in1)
-      begin
-        next_state = `STAT_LAP_stop;
-        count_enable = `DISABLED;
-        show_time = `ENABLED;
-      end
-      else
-      begin
-        next_state = `STAT_STOP;
-        count_enable = `DISABLED;
-        show_time = `DISABLED;
-      end
+    end
     `STAT_LAP_count:
+    begin
+      count_enable = `ENABLED;
+      show_time = `ENABLED;
       if (in && ~in1)
-      begin
-        next_state = `STAT_LAP_stop;
-        count_enable = `DISABLED;
-        show_time = `ENABLED;
-      end
-      else if (in && in1)
-      begin
         next_state = `STAT_STOP;
+      else if (~in && ~in1)
+        next_state = `STAT_LAP_count;
+      else
+        next_state = `STAT_COUNT;
+    end
+   default:
+      begin
+        next_state = `STAT_INITIAL;
         count_enable = `DISABLED;
         show_time = `DISABLED;
-      end
-      else if (~in && ~in1)
-      begin
-        next_state = `STAT_LAP_count;
-        count_enable = `ENABLED;
-        show_time = `ENABLED;
-      end
-      else
-      begin
-        next_state = `STAT_COUNT;
-        count_enable = `ENABLED;
-        show_time = `DISABLED;
-      end
+      end     
   endcase
 
 // FSM state transition
 always @(posedge clk or posedge rst)
   if (rst)
-    state <= `STAT_STOP;
+    state <= `STAT_INITIAL;
   else
     state <= next_state;
-
 endmodule
