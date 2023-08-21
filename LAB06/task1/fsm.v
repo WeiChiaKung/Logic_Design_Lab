@@ -5,6 +5,7 @@ module fsm(
   output reg data_load_enable,
   output reg reg_load_enable,
   output reg alarm_enable,
+  output reg reset,
   output reg [2:0] set_hour_min_sec,
   output reg [5:0] state,
   input mode,
@@ -130,63 +131,71 @@ begin
   `STW_DISP:
    begin
       state_led = `STW_DISP;
+      stopwatch_count_enable = `DISABLED;
+      data_load_enable = `DISABLED;
+      reset = `ENABLED;
       if (switch)
       begin
         state_next = `STW_COUNT;
-        data_load_enable = `DISABLED;
-        stopwatch_count_enable = `ENABLED;
       end
       else if(short_press)
         state_next = `ALM_DISP;
       else
         state_next = `STW_DISP;
-        data_load_enable = `DISABLED;
-        stopwatch_count_enable = `DISABLED;
     end
   `STW_COUNT:
     begin
       state_led = `STW_COUNT;
+      stopwatch_count_enable = `ENABLED;
+      data_load_enable = `DISABLED;
+      reset = `DISABLED;
       if (switch)
       begin
-        state_next = `STW_DISP;
-        data_load_enable = `DISABLED;
-        stopwatch_count_enable = `DISABLED;
+        state_next = `STW_STOP;
       end
       else if (display_mode)
       begin
         state_next =  `STW_LAP_COUNT;
-        data_load_enable = `ENABLED;
-        stopwatch_count_enable = `ENABLED;
       end
       else
       begin
         state_next = `STW_COUNT;
-        data_load_enable = `DISABLED;
-        stopwatch_count_enable = `ENABLED;
       end
     end
   `STW_LAP_COUNT:
     begin
       state_led = `STW_LAP_COUNT;
+      stopwatch_count_enable = `ENABLED;
+      data_load_enable = `ENABLED;
+      reset = `DISABLED;
       if (switch)
       begin
-        state_next = `STW_DISP;
-        data_load_enable = `DISABLED;
-        stopwatch_count_enable = `DISABLED;
+        state_next = `STW_STOP;
       end
       else if (display_mode)
       begin
         state_next =  `STW_COUNT;
-        data_load_enable = `DISABLED;
-        stopwatch_count_enable = `ENABLED;
       end
       else
       begin
         state_next = `STW_LAP_COUNT;
-        data_load_enable = `ENABLED;
-        stopwatch_count_enable = `ENABLED;
       end
     end
+  `STW_STOP:
+      begin
+        state_led = `STW_STOP;
+        stopwatch_count_enable = `DISABLED;
+        data_load_enable = `ENABLED;
+        reset = `DISABLED;
+        if (display_mode)
+        begin
+          state_next = `STW_DISP;
+        end
+        else
+        begin
+          state_next = `STW_STOP;
+        end
+      end
   `ALM_DISP:
     begin
       state_led = `ALM_DISP;
