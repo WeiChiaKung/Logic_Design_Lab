@@ -20,6 +20,7 @@ wire clk_d; // divided clock
 
 wire count_enable; // if count is enabled
 wire show_time;
+wire reset;
 reg [`BCD_BIT_WIDTH-1:0] segnumber0,segnumber1,segnumber2,segnumber3;
 wire [`BCD_BIT_WIDTH-1:0] dig0,dig1,dig2,dig3; // second counter output
 reg [`BCD_BIT_WIDTH-1:0] lap0,lap1,lap2,lap3; // second counter output
@@ -40,6 +41,7 @@ freqdiv27 U_FD(
 fsm U_fsm(
   .count_enable(count_enable),  // if counter is enabled 
   .show_time(show_time),
+  .reset(reset),
   .in(in), //input control
   .in1(in1),
   .clk(clk_d), // global clock signal
@@ -54,8 +56,8 @@ upcounter_4d U_sw(
   .digit0(dig0),  // 1st digit of the down counter
   .clk(clk_d),  // global clock
   .rst(rst),  // low active reset
-  .stop_n(count_enable),
-  .en(1'b1) // enable/disable for the stopwatch
+  .en(count_enable), // enable/disable for the stopwatch
+  .reset(reset)
 );
 always@(posedge show_time)
 begin
