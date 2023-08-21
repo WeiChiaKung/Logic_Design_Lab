@@ -11,6 +11,7 @@
 module fsm(
   count_enable,  // if counter is enabled 
   show_time,
+  reset,
   in, //input control
   in1,
   clk, // global clock signal
@@ -20,6 +21,7 @@ module fsm(
 // outputs
 output count_enable;  // if counter is enabled 
 output show_time;
+output reset;
 // inputs
 input clk; // global clock signal
 input rst; // low active reset
@@ -27,6 +29,7 @@ input in,in1; //input control
 
 reg count_enable;  // if counter is enabled 
 reg show_time;
+reg reset;
 reg [1:0]state; // state of FSM
 reg [1:0]next_state; // next state of FSM
 // ***************************
@@ -39,6 +42,7 @@ always @*
     begin
       count_enable = `DISABLED;
       show_time = `DISABLED;
+      reset = `ENABLED;
       if (in && ~in1)
         next_state = `STAT_COUNT;
       else 
@@ -48,6 +52,7 @@ always @*
     begin
       count_enable = `DISABLED;
       show_time = `ENABLED;
+      reset = `DISABLED;
       if (~in && in1)
         next_state = `STAT_INITIAL;
       else
@@ -57,6 +62,7 @@ always @*
     begin
       count_enable = `ENABLED;
       show_time = `DISABLED;
+      reset = `DISABLED;
       if (in && ~in1)
         next_state = `STAT_STOP;
       else if (~in && ~in1)
@@ -68,6 +74,7 @@ always @*
     begin
       count_enable = `ENABLED;
       show_time = `ENABLED;
+      reset = `DISABLED;
       if (in && ~in1)
         next_state = `STAT_STOP;
       else if (~in && ~in1)
