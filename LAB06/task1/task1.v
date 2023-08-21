@@ -12,6 +12,7 @@ module task1(
 
 wire clk_1, clk_2k; //divided clock
 wire data_load_enable, reg_load_enable;
+wire reset;
 wire alarm_enable;
 wire [2:0] set_hour_min_sec;
 reg [`BCD_BIT_WIDTH-1:0] sec0, sec1,min0, min1, hour0, hour1,date0, date1, month0, month1,year0, year1; // Binary counter output
@@ -86,7 +87,8 @@ stopwatch Ustw(
   .count_enable(stopwatch_count_enable), 
   .lap(data_load_enable),
   .clk(clk_1), 
-  .rst_n(rst_n) 
+  .rst_n(rst_n),
+  .reset(reset)
 );
 // Alarm
 alarm(
@@ -117,6 +119,7 @@ fsm Ufsm(
   .data_load_enable(data_load_enable),
   .reg_load_enable(reg_load_enable),
   .alarm_enable(alarm_enable),
+  .reset(reset),
   .set_hour_min_sec(set_hour_min_sec),
   .state(state),
   .mode(mode),
@@ -250,6 +253,13 @@ always @*
       min1 = stopwatch_min1;
     end
   `STW_LAP_COUNT:
+    begin
+      sec0 = stopwatch_sec0;
+      sec1 = stopwatch_sec1;
+      min0 = stopwatch_min0;
+      min1 = stopwatch_min1;
+    end
+  `STW_STOP:
     begin
       sec0 = stopwatch_sec0;
       sec1 = stopwatch_sec1;
