@@ -4,7 +4,6 @@ module upcounter(
   carry,  // borrow indicator for counter to next stage
   clk, // global clock signal
   rst_n,  // low active reset
-  stop_n,
   increase,  // decrease input from previous stage of counter
   init_value,  // initial value for the counter
   limit  // limit for the counter
@@ -16,7 +15,6 @@ output carry; // borrow indicator for counter to next stage
 // inputs
 input clk; // global clock signal
 input rst_n; // low active reset
-input stop_n;
 input increase; // decrease input from previous stage of counter
 input [`BCD_BIT_WIDTH-1:0] init_value; // initial value for the counter
 input [`BCD_BIT_WIDTH-1:0] limit; // limit for the counter
@@ -27,12 +25,6 @@ reg carry; // borrow indicator for counter to next stage
 
 // combinational part for BCD counter
 always @*
-if(~stop_n)
-begin
-  value_tmp = init_value;
-  carry = `DISABLED;
-end 
-else
 begin  
   if (value == limit && increase)  // reach limit, go back to 0
   begin
