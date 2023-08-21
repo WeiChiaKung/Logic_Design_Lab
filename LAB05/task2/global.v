@@ -62,5 +62,5 @@
 // FSM
 `define STAT_COUNT 2'b01
 `define STAT_LAP_count 2'b11
-`define STAT_LAP_stop 2'b10
-`define STAT_STOP 2'b00
+`define STAT_STOP 2'b10
+`define STAT_INITIAL 2'b00
