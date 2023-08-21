@@ -87,7 +87,7 @@ always @*
         next_state = `STAT_INITIAL;
         count_enable = `DISABLED;
         show_time = `DISABLED;
-        reset = `DISABLED;
+        reset = `ENABLED;
       end     
   endcase
 
