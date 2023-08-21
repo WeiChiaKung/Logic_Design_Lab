@@ -37,6 +37,7 @@
 `define STW_DISP 6'b001_000
 `define STW_COUNT 6'b001_001
 `define STW_LAP_COUNT 6'b001_010
+`define STW_STOP 6'b001_011
 `define ALM_DISP 6'b010_000
 `define ALM_SETMIN 6'b010_001
 `define ALM_SETHOUR 6'b010_010
